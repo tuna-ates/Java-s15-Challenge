@@ -9,10 +9,33 @@ import java.util.Set;
 
 public class Reader extends Person{
     List<Book> books;
+    private int claimBook;
+    private int bill;
+
+
 
     public Reader(String name, int position) {
         super(name, position);
         this.books=new ArrayList<>();
+        this.claimBook=0;
+        this.bill=0;
+    }
+
+
+    public int getClaimBook() {
+        return claimBook;
+    }
+
+    public void setClaimBook(int claimBook) {
+        this.claimBook = claimBook;
+    }
+
+    public int getBill() {
+        return bill;
+    }
+
+    public void setBill(int bill) {
+        this.bill = bill;
     }
 
     public List<Book> getBooks() {

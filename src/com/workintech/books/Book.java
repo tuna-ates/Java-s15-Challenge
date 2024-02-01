@@ -10,6 +10,9 @@ public class Book {
     private Status status;
     private BookType bookType;
 
+    public Book() {
+    }
+
     public Book(int id, Author author, String name,
                 int price, Status status, BookType bookType) {
         this.id = id;
@@ -51,6 +54,8 @@ public class Book {
     public void setPrice(int price) {
         this.price = price;
     }
+
+
 
     public Status getStatus() {
         return status;

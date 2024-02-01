@@ -50,10 +50,11 @@ public class Main {
 
         System.out.println("--------------------------------");
         System.out.println("********ID,ISIM,YAZARA GÖRE KİTAP GETİRME********");
+        System.out.println("-------------id'ye göre---------------");
         library.selectBookId(2);
-        System.out.println("--------------------------------");
+        System.out.println("--------------isime göre---------------");
         library.selectBookName("spor");
-        System.out.println("--------------------------------");
+        System.out.println("------------yazara göre--------------");
         library.selectBookAuthor("buse");
 
         System.out.println("--------------------------------");
@@ -68,7 +69,7 @@ public class Main {
         System.out.println("********BÜTÜN KİTAPLARI SİLME********");
         library.allDeleteBook();
 
-
+        System.out.println("--------------------------------");
         library.addBook(magazineBook);
         library.addBook(magazineBook2);
         library.addBook(studyBook);
@@ -86,7 +87,10 @@ public class Main {
         System.out.println("********KİTAP ÖDÜNÇ ALMA********");
         library.borrowBook(reader1,magazineBook);
 
-library.deliveryBook(reader1);
+
+        System.out.println("--------------------------------");
+        System.out.println("********KİTAP GERİ TESLİM ETME********");
+        library.deliveryBook(reader1);
 
     }
 }

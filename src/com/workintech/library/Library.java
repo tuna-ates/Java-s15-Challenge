@@ -1,15 +1,15 @@
 package com.workintech.library;
 
+import com.workintech.LibraryInterfaces;
 import com.workintech.books.Book;
 import com.workintech.books.BookType;
 import com.workintech.books.Status;
-import com.workintech.person.Author;
 import com.workintech.person.Person;
 import com.workintech.person.Reader;
 
 import java.util.*;
 
-public class Library {
+public class Library implements LibraryInterfaces {
     private List<Book> books;
     private Set<Reader> readers;
     private Map<Integer,Book> categoryBooks;
@@ -82,15 +82,15 @@ public class Library {
 
   }
 
-    public void selectBookId(int id){
-
+    public Book selectBookId(int id){
+     Book result=new Book();
      for (int i=0;i<books.size();i++){
          if (books.get(i).getId()==id){
              System.out.println(books.get(i));
-
+             return books.get(i);
          }
       }
-
+      return  result;
 
   }
 
@@ -168,44 +168,65 @@ public class Library {
         authorBooks.clear();
     }
 
-    public void borrowBook(Reader reader,Book book){
-
-       if ( this.readers.contains(reader)){
-
-          for (int i=0;i<books.size();i++){
-              if (books.get(i).equals(book)&&books.get(i).getStatus()==Status.IDLE){
-                  System.out.println("Kitap var");
-                  books.get(i).setStatus(Status.APPOINTED);
-                  selectBooks.add(book);
-                  reader.setBooks(selectBooks);
-                  System.out.println(reader.getBooks());
-              }
-          }
 
 
-       }
-       else {
-           System.out.println("kullanıcı yok");
-       }
+    @Override
+    public void borrowBook(Reader reader, Book book) {
+        int claim=reader.getClaimBook();
+        int bill=reader.getBill();
+        if ( this.readers.contains(reader)&&reader.getClaimBook()<5){
 
-    }
-
-    public void deliveryBook(Reader reader){
-        if ( this.readers.contains(reader)){
-
-            for (int i=0;i<reader.getBooks().size();i++){
-                if (books.contains(reader.getBooks().get(i))){
-                    System.out.println("Kitap var"+reader.getBooks().get(i));
-
+            for (int i=0;i<books.size();i++){
+                if (books.get(i).equals(book)&&books.get(i).getStatus()==Status.IDLE){
+                    books.get(i).setStatus(Status.APPOINTED);
+                    selectBooks.add(books.get(i));
+                    reader.setBooks(selectBooks);
+                    claim=claim+1;
+                    reader.setClaimBook(claim);
+                    bill=bill+books.get(i).getPrice();
+                    reader.setBill(bill);
+                    System.out.println(reader.getBooks());
+                    System.out.println("Kesilen fatura tuturı:"+reader.getBill());
                 }
             }
 
+        }
+        else {
+            System.out.println("kullanıcı yok veya kitap alma hakkınız doludur");
+        }
+    }
+
+    @Override
+    public void deliveryBook(Reader reader) {
+        int claim=reader.getClaimBook();
+        int bill=reader.getBill();
+        if ( this.readers.contains(reader)){
+
+            for (int i=0;i<reader.getBooks().size();i++){
+
+                if (books.contains(reader.getBooks().get(i))){
+                    selectBookId(reader.getBooks().get(i).getId()).setStatus(Status.IDLE);
+                    System.out.println("Geri teslim edilen kitap: "+reader.getBooks().get(i));
+
+                    claim=claim-1;
+                    reader.setClaimBook(claim);
+                    bill=bill-reader.getBooks().get(i).getPrice();
+                    System.out.println("Geri iade edilen tutar: "+reader.getBooks().get(i).getPrice());
+                    reader.getBooks().remove(reader.getBooks().get(i));
+
+                }
+                else {
+                    System.out.println("Bu kitap bulunamadı!!");
+                }
+            }
 
         }
         else {
             System.out.println("kullanıcı yok");
         }
     }
+
+
 
 
 
@@ -222,4 +243,8 @@ public class Library {
                 ", readers=" + readers +
                 '}';
     }
+
+
+
+
 }
